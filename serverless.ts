@@ -12,7 +12,7 @@ const serverlessConfiguration: AWS = {
         },
         'serverless-layers': {
             layersDeploymentBucket: 'cassette-lambda',
-            dependenciesPath: './prd/package.json',
+            dependenciesPath: './package.json',
         },
 
     },
