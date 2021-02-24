@@ -3,7 +3,7 @@ import type { AWS } from '@serverless/typescript';
 import { signup } from './src/functions';
 
 const serverlessConfiguration: AWS = {
-    service: 'cassette-signup',
+    service: 'cassette-serverless',
     frameworkVersion: '2',
     custom: {
         webpack: {
