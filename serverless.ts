@@ -14,11 +14,16 @@ const serverlessConfiguration: AWS = {
             layersDeploymentBucket: 'cassette-lambda',
             dependenciesPath: './package.json',
         },
-
+        apiKeys: [
+            {
+                name: 'gas',
+            },
+        ],
     },
     plugins: [
         'serverless-webpack',
         'serverless-layers',
+        'serverless-add-api-key',
     ],
     provider: {
         name: 'aws',
