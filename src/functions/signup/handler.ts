@@ -44,10 +44,9 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
         console.log('try!');
 
         await appSyncClient.mutate({
-            fetchPolicy: 'network-only',
             mutation: gql(mutations.createUser),
             variables: {
-                cognito_username: '',
+                cognito_username: 'tmp',
                 email: event.body.email,
                 role: event.body.role,
             },
