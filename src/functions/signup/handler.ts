@@ -28,17 +28,17 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
         disableOffline: true
     });
 
-    const createTeacherInput: api.CreateTeacherInput = {
-        id?: string;
-        userId: string;
-        name: string;
-        english_name: string;
-        phone_number: string;
-        address: string;
-        biography?: string;
-        nationality: string;
-        meeting_url?: string;
-    }
+    // const createTeacherInput: api.CreateTeacherInput = {
+    //     id?: string;
+    //     userId: string;
+    //     name: string;
+    //     english_name: string;
+    //     phone_number: string;
+    //     address: string;
+    //     biography?: string;
+    //     nationality: string;
+    //     meeting_url?: string;
+    // }
 
     try {
         
