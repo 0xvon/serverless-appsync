@@ -40,7 +40,7 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
     //     meeting_url?: string;
     // }
     try {
-        console.log(event);
+        console.log(event.body);
         const createUserInput: api.CreateUserInput = {
             cognito_username: 'tmp',
             email: event.body.email,
@@ -49,7 +49,7 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
 
         const createUserResponse = await appSyncClient.mutate({
             mutation: gql(mutations.createUser),
-            variables: { createUserInput },
+            variables: createUserInput,
         });
         console.log(createUserResponse.data);
 
