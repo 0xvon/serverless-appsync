@@ -1,7 +1,13 @@
 export default {
     type: "object",
     properties: {
-        name: { type: 'string' }
+        email: { type: 'string' },
+        role: { type: 'string' },
+        name: { type: 'string' },
+        english_name: { type: 'string' },
+        phone_number: { type: 'string' },
+        address: { type: 'string' },
+        nationality: { type: 'string' },
     },
-    required: ['name']
+    required: ['email', 'role', 'name', 'english_name', 'phone_number', 'address', 'nationality'],
 } as const;
