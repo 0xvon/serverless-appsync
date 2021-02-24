@@ -43,7 +43,7 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
     try {
         console.log('try!');
 
-        const { createUserData } = await appSyncClient.mutate({
+        await appSyncClient.mutate({
             fetchPolicy: 'network-only',
             mutation: gql(mutations.createUser),
             variables: {
@@ -52,7 +52,6 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
                 role: event.body.role,
             },
         });
-        console.log(createUserData);
 
         const { data } = await appSyncClient.query({
             fetchPolicy: 'network-only',
