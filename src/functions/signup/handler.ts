@@ -40,35 +40,35 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
     //     nationality: string;
     //     meeting_url?: string;
     // }
-    console.log('start');
     try {
-        console.log('try!');
+        console.log(event.body);
+        const createUserInput: api.CreateUserInput = {
+            cognito_username: 'tmp',
+            email: event.body.email,
+            role: event.body.role,
+        };
 
-        // const createUserInput: api.CreateUserInput = {
-        //     cognito_username: 'tmp',
-        //     email: event.body.email,
-        //     role: event.body.role,
-        // }
-
-        // await appSyncClient.mutate({
-        //     mutation: gql(mutations.createUser),
-        //     variables: createUserInput,
-        // });
+        const createUserResponse = await appSyncClient.mutate({
+            mutation: gql(mutations.createUser),
+            variables: { createUserInput },
+        });
+        console.log(createUserResponse.data);
 
         const listUsersInput: api.ModelUserFilterInput = {
             email: { eq: 'masato.11.soccer+cassette@gmail.com' },
-        }
+        };
 
-        const { data } = await appSyncClient.query({
+        const listUsersResponse = await appSyncClient.query({
             fetchPolicy: 'network-only',
             query: gql(queries.listUsers),
             variables: listUsersInput,
         });
-        console.log(data);
-        const userData = data as List<User>;
+        const userData = listUsersResponse.data as List<User>;
+        const user = userData.listUsers.items[0];
+        console.log(user);
 
         return formatJSONResponse({
-            result: userData.listUsers.items[0],
+            result: createUserResponse.data,
         });
     } catch (err) {
         return formatJSONResponse({
