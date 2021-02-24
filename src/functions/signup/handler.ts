@@ -38,9 +38,11 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
         const createUserResponse = await appSyncClient.mutate({
             mutation: gql(mutations.createUser),
             variables: { input: createUserInput },
-        }) as api.CreateUserMutation;
+        }) as { data: api.CreateUserMutation };
         console.log(createUserResponse);
-        console.log(createUserResponse.createUser.id);
+
+        const userId = createUserResponse.data.createUser.id;
+        console.log(userId);
 
         // const listUsersInput: api.ModelUserFilterInput = {
         //     email: { eq: 'masato.11.soccer+cassette@gmail.com' },
@@ -55,7 +57,7 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
         // const user = userData.listUsers.items[0];
 
         const createTeacherInput: api.CreateTeacherInput = {
-            userId: createUserResponse.createUser.id,
+            userId: userId,
             name: event.body.name,
             english_name: event.body.english_name,
             phone_number: event.body.phone_number,
@@ -67,10 +69,10 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
         const createTeacherResponse = await appSyncClient.mutate({
             mutation: gql(mutations.createTeacher),
             variables: { input: createTeacherInput },
-        }) as api.CreateTeacherMutation;
+        }) as { data: api.CreateTeacherMutation };
 
         return formatJSONResponse({
-            result: createTeacherResponse.createTeacher,
+            result: createTeacherResponse.data.createTeacher,
         });
     } catch (err) {
         return formatJSONResponse({
