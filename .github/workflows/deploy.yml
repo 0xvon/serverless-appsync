@@ -25,6 +25,8 @@ jobs:
                   aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                   aws-region: ap-northeast-1
+            
+            - run: aws s3 cp ./package.json s3://cassette-lambda/prd/package.json
 
             - name: deploy
               uses: serverless/github-action@master
