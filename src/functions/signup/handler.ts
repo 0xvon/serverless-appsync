@@ -60,6 +60,7 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
             address: event.body.address,
             nationality: event.body.nationality,
         };
+        console.log(createTeacherInput);
 
         const createTeacherResponse = await appSyncClient.mutate({
             mutation: gql(mutations.createTeacher),
