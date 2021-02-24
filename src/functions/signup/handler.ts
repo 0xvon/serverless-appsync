@@ -7,7 +7,6 @@ import { AWSAppSyncClient, AUTH_TYPE } from 'aws-appsync';
 import schema from './schema';
 import { ModelUserFilterInput } from './graphql/API';
 import * as queries from './graphql/query';
-import { execPath } from 'process';
 require('isomorphic-fetch');
 
 const env = require("process").env;
