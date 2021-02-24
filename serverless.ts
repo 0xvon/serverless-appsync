@@ -10,10 +10,11 @@ const serverlessConfiguration: AWS = {
             webpackConfig: './webpack.config.js',
             includeModules: true
         },
-        layers: {
+        'serverless-layers': {
             layersDeploymentBucket: 'cassette-lambda',
             dependenciesPath: './package.json',
         },
+
     },
     plugins: [
         'serverless-webpack',
