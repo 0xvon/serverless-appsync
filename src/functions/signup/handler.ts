@@ -43,16 +43,16 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
     try {
         console.log('try!');
 
-        const createUserInput: api.CreateUserInput = {
-            cognito_username: 'tmp',
-            email: event.body.email,
-            role: event.body.role,
-        }
+        // const createUserInput: api.CreateUserInput = {
+        //     cognito_username: 'tmp',
+        //     email: event.body.email,
+        //     role: event.body.role,
+        // }
 
-        await appSyncClient.mutate({
-            mutation: gql(mutations.createUser),
-            variables: createUserInput,
-        });
+        // await appSyncClient.mutate({
+        //     mutation: gql(mutations.createUser),
+        //     variables: createUserInput,
+        // });
 
         const listUsersInput: api.ModelUserFilterInput = {
             email: { eq: 'masato.11.soccer+cassette@gmail.com' },
@@ -74,25 +74,5 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
         });
     };
 };
-
-// async function createUser(appSyncClient: AWSAppSyncClient<NormalizedCacheObject>, input: api.CreateUserInput) {
-//     const { createUserData } = await appSyncClient.mutate({
-//         fetchPolicy: 'network-only',
-//         mutation: gql(mutations.createUser),
-//         variables: input,
-//     });
-
-//     return createUserData;
-// };
-
-// async function getUser(appSyncClient: AWSAppSyncClient<NormalizedCacheObject>, input: api.ModelUserFilterInput) {
-//     const { data } = await appSyncClient.query({
-//         fetchPolicy: 'network-only',
-//         query: gql(queries.listUsers),
-//         variables: input,
-//     });
-
-//     return data;
-// };
 
 export const main = middyfy(hello);
