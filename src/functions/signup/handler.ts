@@ -8,7 +8,6 @@ import schema from './schema';
 import * as api from './graphql/API';
 import * as queries from './graphql/queries';
 import * as mutations from './graphql/mutations';
-import { create } from 'domain';
 import { User, List } from './graphql/type';
 require('isomorphic-fetch');
 const gql = require('graphql-tag');
@@ -41,7 +40,7 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
     //     meeting_url?: string;
     // }
     try {
-        console.log(event.body);
+        console.log(event);
         const createUserInput: api.CreateUserInput = {
             cognito_username: 'tmp',
             email: event.body.email,
