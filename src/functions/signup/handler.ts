@@ -42,13 +42,13 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
 
     try {
         
-        const createUserData = createUser(appSyncClient, {
+        const createUserData = await createUser(appSyncClient, {
             cognito_username: '',
             email: event.body.email,
             role: event.body.role,
         });
 
-        const users = getUser(appSyncClient, {
+        const users = await getUser(appSyncClient, {
             email: { eq: event.body.email },
         });
 
