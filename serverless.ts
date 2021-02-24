@@ -48,6 +48,7 @@ const serverlessConfiguration: AWS = {
                     "dynamodb:GetRecords",
                     "dynamodb:GetShardIterator",
                     "dynamodb:ListStreams",
+                    "appsync:GraphQL",
                     "logs:CreateLogGroup",
                     "logs:CreateLogStream",
                     "logs:PutLogEvents",
