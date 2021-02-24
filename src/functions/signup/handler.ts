@@ -9,6 +9,7 @@ import * as api from './graphql/API';
 import * as queries from './graphql/queries';
 import * as mutations from './graphql/mutations';
 import { create } from 'domain';
+import { User, List } from './graphql/type';
 require('isomorphic-fetch');
 const gql = require('graphql-tag');
 
@@ -64,9 +65,10 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
             variables: listUsersInput,
         });
         console.log(data);
+        const userData = data as List<User>;
 
         return formatJSONResponse({
-            result: data,
+            result: userData.listUsers.items[0],
         });
     } catch (err) {
         return formatJSONResponse({
