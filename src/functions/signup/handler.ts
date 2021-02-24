@@ -46,9 +46,11 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
         await appSyncClient.mutate({
             mutation: gql(mutations.createUser),
             variables: {
-                cognito_username: 'tmp',
-                email: event.body.email,
-                role: event.body.role,
+                input: {
+                    cognito_username: 'tmp',
+                    email: event.body.email,
+                    role: event.body.role,
+                },
             },
         });
 
@@ -56,7 +58,9 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
             fetchPolicy: 'network-only',
             query: gql(queries.listUsers),
             variables: {
-                email: { eq: event.body.email },
+                filter: {
+                    email: { eq: 'masato.11.soccer+cassette@gmail.com' },
+                }
             },
         });
         console.log(data);
