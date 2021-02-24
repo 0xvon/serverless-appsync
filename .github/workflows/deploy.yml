@@ -12,6 +12,13 @@ jobs:
             - name: checkout
               uses: actions/checkout@v1
 
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v1
+              with:
+                node-version: '14.x'
+            
+            - run: npm i
+
             - name: configure aws
               uses: aws-actions/configure-aws-credentials@v1
               with:
