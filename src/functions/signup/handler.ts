@@ -4,11 +4,11 @@ import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import { AWSAppSyncClient, AUTH_TYPE,  } from 'aws-appsync';
-import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import schema from './schema';
 import * as api from './graphql/API';
 import * as queries from './graphql/queries';
 import * as mutations from './graphql/mutations';
+import { create } from 'domain';
 require('isomorphic-fetch');
 const gql = require('graphql-tag');
 
@@ -18,7 +18,7 @@ const appSyncUrl = env.ENDPOINT_URL;
 const apiKey = env.API_KEY;
 
 const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
-    const appSyncClient: AWSAppSyncClient<NormalizedCacheObject> = new AWSAppSyncClient({
+    const appSyncClient = new AWSAppSyncClient({
         url: appSyncUrl,
         region,
         auth: {
@@ -43,25 +43,25 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
     try {
         console.log('try!');
 
+        const createUserInput: api.CreateUserInput = {
+            cognito_username: 'tmp',
+            email: event.body.email,
+            role: event.body.role,
+        }
+
         await appSyncClient.mutate({
             mutation: gql(mutations.createUser),
-            variables: {
-                input: {
-                    cognito_username: 'tmp',
-                    email: event.body.email,
-                    role: event.body.role,
-                },
-            },
+            variables: createUserInput,
         });
+
+        const listUsersInput: api.ModelUserFilterInput = {
+            email: { eq: 'masato.11.soccer+cassette@gmail.com' },
+        }
 
         const { data } = await appSyncClient.query({
             fetchPolicy: 'network-only',
             query: gql(queries.listUsers),
-            variables: {
-                filter: {
-                    email: { eq: 'masato.11.soccer+cassette@gmail.com' },
-                }
-            },
+            variables: listUsersInput,
         });
         console.log(data);
 
