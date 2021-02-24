@@ -39,6 +39,8 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
             mutation: gql(mutations.createUser),
             variables: { input: createUserInput },
         }) as api.CreateUserMutation;
+        console.log(createUserResponse);
+        console.log(createUserResponse.createUser.id);
 
         // const listUsersInput: api.ModelUserFilterInput = {
         //     email: { eq: 'masato.11.soccer+cassette@gmail.com' },
