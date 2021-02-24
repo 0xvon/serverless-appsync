@@ -49,7 +49,7 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
 
         const createUserResponse = await appSyncClient.mutate({
             mutation: gql(mutations.createUser),
-            variables: createUserInput,
+            variables: { input: createUserInput },
         });
         console.log(createUserResponse.data);
 
