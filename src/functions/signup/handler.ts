@@ -39,18 +39,21 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
     //     nationality: string;
     //     meeting_url?: string;
     // }
-
+    console.log('start');
     try {
+        console.log('try!');
         
         const createUserData = await createUser(appSyncClient, {
             cognito_username: '',
             email: event.body.email,
             role: event.body.role,
         });
+        console.log(createUserData);
 
         const users = await getUser(appSyncClient, {
             email: { eq: event.body.email },
         });
+        console.log(users);
 
         return formatJSONResponse({
             result: users,
@@ -68,7 +71,6 @@ async function createUser(appSyncClient: AWSAppSyncClient<NormalizedCacheObject>
         mutation: gql(mutations.createUser),
         variables: input,
     });
-    console.log(createUserData);
 
     return createUserData;
 };
@@ -79,7 +81,6 @@ async function getUser(appSyncClient: AWSAppSyncClient<NormalizedCacheObject>, i
         query: gql(queries.listUsers),
         variables: input,
     });
-    console.log(data);
 
     return data;
 };
