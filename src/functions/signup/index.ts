@@ -9,10 +9,11 @@ export default {
                 path: 'signup',
                 request: {
                     schema: {
-                        'application/json': schema
-                    }
-                }
-            }
+                        'application/json': schema,
+                    },
+                },
+                private: true,
+            },
         }
     ],
     environment: {
