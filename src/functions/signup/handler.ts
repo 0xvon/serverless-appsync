@@ -2,10 +2,11 @@ import 'source-map-support/register';
 
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
 import { formatJSONResponse } from '@libs/apiGateway';
+import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { middyfy } from '@libs/lambda';
 import { AWSAppSyncClient, AUTH_TYPE } from 'aws-appsync';
 import schema from './schema';
-import * as api from './graphql/API';
+import * as api from './graphql/Model';
 import * as mutations from './graphql/mutations';
 require('isomorphic-fetch');
 const gql = require('graphql-tag');
@@ -33,13 +34,9 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
             email: event.body.email,
             role: event.body.role,
         };
-
-        const createUserResponse = await appSyncClient.mutate({
-            mutation: gql(mutations.createUser),
-            variables: { input: createUserInput },
-        }) as { data: api.CreateUserMutation };
+        const createUserResponse = await createUser(appSyncClient, createUserInput);
         const userId = createUserResponse.data.createUser.id;
-        console.log(userId);
+        console.log(`userId is: ${userId}`);
 
         const createTeacherInput: api.CreateTeacherInput = {
             userId: userId,
@@ -49,11 +46,8 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
             address: event.body.address,
             nationality: event.body.nationality,
         };
-
-        const createTeacherResponse = await appSyncClient.mutate({
-            mutation: gql(mutations.createTeacher),
-            variables: { input: createTeacherInput },
-        }) as { data: api.CreateTeacherMutation };
+        const createTeacherResponse = await createTeacher(appSyncClient, createTeacherInput);
+        console.log(`teacherId is: ${createTeacherResponse.data.createTeacher.id}`);
 
         return formatJSONResponse({
             result: createTeacherResponse.data.createTeacher,
@@ -64,5 +58,23 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
         });
     };
 };
+
+const createUser = async (appSyncClient: AWSAppSyncClient<NormalizedCacheObject>, input: api.CreateUserInput): Promise<api.Output<api.CreateUserMutation>> => {
+    const createUserResponse = await appSyncClient.mutate({
+        mutation: gql(mutations.createUser),
+        variables: { input: input },
+    }) as api.Output<api.CreateUserMutation>;
+
+    return createUserResponse;
+}
+
+const createTeacher = async (appSyncClient: AWSAppSyncClient<NormalizedCacheObject>, input: api.CreateTeacherInput): Promise<api.Output<api.CreateTeacherMutation>> => {
+    const createTeacherResponse = await appSyncClient.mutate({
+        mutation: gql(mutations.createTeacher),
+        variables: { input: input },
+    }) as api.Output<api.CreateTeacherMutation>;
+
+    return createTeacherResponse;
+}
 
 export const main = middyfy(hello);
