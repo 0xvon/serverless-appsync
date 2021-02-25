@@ -3,7 +3,7 @@ import type { AWS } from '@serverless/typescript';
 import { signup } from './src/functions';
 
 const serverlessConfiguration: AWS = {
-    service: 'cassette-serverless',
+    service: 'serverless-playground',
     frameworkVersion: '2',
     custom: {
         webpack: {
@@ -11,12 +11,12 @@ const serverlessConfiguration: AWS = {
             includeModules: true
         },
         'serverless-layers': {
-            layersDeploymentBucket: 'cassette-lambda',
+            layersDeploymentBucket: 'sample-lambda',
             dependenciesPath: './package.json',
         },
         apiKeys: [
             {
-                name: 'gas',
+                name: 'sample',
             },
         ],
     },

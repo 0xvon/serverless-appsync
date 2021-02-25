@@ -2,5 +2,5 @@
     "headers": {
         "Content-Type": "application/json"
     },
-    "body": "{\"email\":\"someone@gmail.com\",\"role\":\"teacher\",\"name\":\"taro\",\"english_name\":\"taro\",\"phone_number\":\"00099998888\",\"address\":\"Tokyo, Japan\",\"nationality\":\"Japan\"}"
+    "body": "{\"email\":\"example@gmail.com\",\"role\":\"admin\"}"
 }

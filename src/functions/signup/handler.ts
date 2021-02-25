@@ -8,9 +8,10 @@ import { AWSAppSyncClient, AUTH_TYPE } from 'aws-appsync';
 import schema from './schema';
 import * as api from './graphql/Model';
 import * as mutations from './graphql/mutations';
-require('isomorphic-fetch');
-const gql = require('graphql-tag');
+import * as queries from './graphql/queries';
+import 'isomorphic-fetch';
 
+const gql = require('graphql-tag');
 const env = require("process").env;
 const region = env.AWS_REGION;
 const appSyncUrl = env.ENDPOINT_URL;
@@ -38,19 +39,13 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) =
         const userId = createUserResponse.data.createUser.id;
         console.log(`userId is: ${userId}`);
 
-        const createTeacherInput: api.CreateTeacherInput = {
-            userId: userId,
-            name: event.body.name,
-            english_name: event.body.english_name,
-            phone_number: event.body.phone_number,
-            address: event.body.address,
-            nationality: event.body.nationality,
+        const listUsersFilter: api.ModelUserFilterInput = {
+            id: { eq: userId },
         };
-        const createTeacherResponse = await createTeacher(appSyncClient, createTeacherInput);
-        console.log(`teacherId is: ${createTeacherResponse.data.createTeacher.id}`);
+        const user = await getUser(appSyncClient, listUsersFilter);
 
         return formatJSONResponse({
-            result: createTeacherResponse.data.createTeacher,
+            result: user,
         });
     } catch (err) {
         return formatJSONResponse({
@@ -68,13 +63,15 @@ const createUser = async (appSyncClient: AWSAppSyncClient<NormalizedCacheObject>
     return createUserResponse;
 }
 
-const createTeacher = async (appSyncClient: AWSAppSyncClient<NormalizedCacheObject>, input: api.CreateTeacherInput): Promise<api.Output<api.CreateTeacherMutation>> => {
-    const createTeacherResponse = await appSyncClient.mutate({
-        mutation: gql(mutations.createTeacher),
-        variables: { input: input },
-    }) as api.Output<api.CreateTeacherMutation>;
+const getUser = async (appSyncClient: AWSAppSyncClient<NormalizedCacheObject>, filter: api.ModelUserFilterInput): Promise<api.User | undefined> => {
+    const listUsersResponse = await appSyncClient.query({
+        fetchPolicy: 'network-only',
+        query: gql(queries.listUsers),
+        variables: filter,
+    }) as api.Output<api.ListUsersQuery>;
 
-    return createTeacherResponse;
+    const user = listUsersResponse.data.listUsers.items[0] as api.User | undefined;
+    return user;
 }
 
 export const main = middyfy(hello);
